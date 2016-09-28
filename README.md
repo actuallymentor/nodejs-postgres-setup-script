@@ -34,4 +34,13 @@ createuser --interactive # or when not logged in as postgres:
 sudo -u postgres createuser --interactive 
 #create db from within postgres user
 createdb yourapp
+# When handling sensitive stuff on the command line
+rm ~/.psql_history
+
+#One way of making a user with a database
+sudo adduser app
+sudo su - postgres
+psql
+CREATE USER app WITH PASSWORD 'password';
+CREATE DATABASE app OWNER app;
 ```
