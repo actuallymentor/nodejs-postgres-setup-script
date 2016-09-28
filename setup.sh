@@ -86,10 +86,27 @@ rotaterules='/var/log/apt-security-updates {
     notifempty
 }'
 webdev="
+# Optional SSL rewrite
+#server  {
+#	listen 80;
+#	server_name         web.dev www.web.dev;
+#	rewrite     ^   https://www.$server_name$request_uri? permanent;
+#}
+#server  {
+#        listen 443 ssl;
+#        server_name         web.dev;
+#        ssl_certificate     /etc/nginx/ssl/web.dev.chained.crt;
+#        ssl_certificate_key /etc/nginx/ssl/web.dev.key;
+#        rewrite     ^   https://www.$server_name$request_uri? permanent;
+#}
 server {
     listen 80;
-
     server_name web.dev;
+
+    #listen              443 ssl;
+	#server_name         www.amazing.com;
+	#ssl_certificate     /etc/nginx/ssl/amazing.com.chained.crt;
+	#ssl_certificate_key /etc/nginx/ssl/amazing.com.key;
 
     location / {
         proxy_pass http://localhost:8080;
