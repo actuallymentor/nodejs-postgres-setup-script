@@ -23,7 +23,7 @@ sudo letsencrypt certonly --standalone
 # Certs now available in /etc/letsencrypt/your_domain_name/
 ```
 
-* Setup a database for your app ( (See [Digital Ocean Community](postgresql postgresql-contrib)) )
+* Setup a database for your app (See [Digital Ocean Community](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04))
 ``` shell
 # Log in as postgres user
 sudo -i -u postgres
