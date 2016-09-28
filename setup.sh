@@ -38,8 +38,6 @@ http {
     #tcp_nopush     on;
     # Gzip configuration
     include /etc/nginx/conf/gzip.conf;
-    #PHP and FastCGI cache
-    include /etc/nginx/conf/fastcgicache_global.conf;
     # Add my servers
     include /etc/nginx/sites/*;
     # Buffers
@@ -85,7 +83,7 @@ rotaterules='/var/log/apt-security-updates {
     compress
     notifempty
 }'
-webdev="
+webdev='
 # Optional SSL rewrite
 #server  {
 #	listen 80;
@@ -112,7 +110,7 @@ server {
         proxy_pass http://localhost:8080;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
+        proxy_set_header Connection "upgrade";
         proxy_set_header Host $host;
         proxy_cache_bypass $http_upgrade;
     }
@@ -125,7 +123,7 @@ server {
     location = /50x.html {
     }
 }
-"
+'
 mkdir /etc/nginx/conf
 mkdir /etc/nginx/sites
 echo "$global_nginx_conf" > /etc/nginx/nginx.conf
