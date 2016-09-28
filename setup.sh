@@ -130,3 +130,5 @@ echo "$global_nginx_conf" > /etc/nginx/nginx.conf
 echo "$cache" > /etc/nginx/conf/cache.conf
 echo "$gzipconf" > /etc/nginx/conf/gzip.conf
 echo "$webdev" > /etc/nginx/sites/web.dev
+
+service nginx restart
