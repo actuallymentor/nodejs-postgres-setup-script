@@ -1,3 +1,4 @@
+read -p "App domain [example.com, no www] " appurl
 # Set up repositories
 cd
 curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
@@ -83,37 +84,45 @@ rotaterules='/var/log/apt-security-updates {
     compress
     notifempty
 }'
-webdev='
-# Optional SSL rewrite
-#server  {
-#	listen 80;
-#	server_name         web.dev www.web.dev;
-#	rewrite     ^   https://www.$server_name$request_uri? permanent;
-#}
+webdev="
+# Optional use for SSL rewrite
+server  {
+	listen 80;
+	server_name         $appurl;
+	rewrite     ^   http://www.$server_name$request_uri? permanent;
+}
 #server  {
 #        listen 443 ssl;
-#        server_name         web.dev;
-#        ssl_certificate     /etc/nginx/ssl/web.dev.chained.crt;
-#        ssl_certificate_key /etc/nginx/ssl/web.dev.key;
+#        server_name         $appurl;
+#        ssl_certificate     /etc/nginx/ssl/$appurl.chained.crt;
+#        ssl_certificate_key /etc/nginx/ssl/$appurl.key;
 #        rewrite     ^   https://www.$server_name$request_uri? permanent;
 #}
 server {
     listen 80;
-    server_name web.dev;
+    server_name www$appurl;
+    root /var/www/$appurl;
+    index index.html index.htm;
+
 
     #listen              443 ssl;
-	#server_name         www.amazing.com;
-	#ssl_certificate     /etc/nginx/ssl/amazing.com.chained.crt;
-	#ssl_certificate_key /etc/nginx/ssl/amazing.com.key;
+	#server_name         $appurl;
+	#ssl_certificate     /etc/nginx/ssl/$appurl.chained.crt;
+	#ssl_certificate_key /etc/nginx/ssl/$appurl.key;
 
     location / {
+       try_files $uri $uri/ =404;
+    }
+
+    location /api/ {
         proxy_pass http://localhost:8080;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
+        proxy_set_header Connection \"upgrade\";
         proxy_set_header Host $host;
         proxy_cache_bypass $http_upgrade;
     }
+
     client_max_body_size 32M;
     large_client_header_buffers 4 16k;
     include /etc/nginx/conf/cache.conf;
@@ -123,12 +132,15 @@ server {
     location = /50x.html {
     }
 }
-'
+"
 mkdir /etc/nginx/conf
 mkdir /etc/nginx/sites
 echo "$global_nginx_conf" > /etc/nginx/nginx.conf
 echo "$cache" > /etc/nginx/conf/cache.conf
 echo "$gzipconf" > /etc/nginx/conf/gzip.conf
 echo "$webdev" > /etc/nginx/sites/web.dev
+
+mkdir "/var/www/$appurl"
+echo "Setup complete for $appurl" >> "/var/www/$appurl"
 
 service nginx restart
