@@ -89,14 +89,14 @@ webdev="
 server  {
 	listen 80;
 	server_name         $appurl;
-	rewrite     ^   http://www.$server_name$request_uri? permanent;
+	rewrite     ^   http://www.\$server_name\$request_uri? permanent;
 }
 #server  {
 #        listen 443 ssl;
 #        server_name         $appurl;
 #        ssl_certificate     /etc/nginx/ssl/$appurl.chained.crt;
 #        ssl_certificate_key /etc/nginx/ssl/$appurl.key;
-#        rewrite     ^   https://www.$server_name$request_uri? permanent;
+#        rewrite     ^   https://www.\$server_name\$request_uri? permanent;
 #}
 server {
     listen 80;
@@ -117,10 +117,10 @@ server {
     location /api/ {
         proxy_pass http://localhost:8080;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection \"upgrade\";
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
+        proxy_set_header Host \$host;
+        proxy_cache_bypass \$http_upgrade;
     }
 
     client_max_body_size 32M;
@@ -141,6 +141,6 @@ echo "$gzipconf" > /etc/nginx/conf/gzip.conf
 echo "$webdev" > /etc/nginx/sites/web.dev
 
 mkdir "/var/www/$appurl"
-echo "Setup complete for $appurl" >> "/var/www/$appurl"
+echo "Setup complete for $appurl" >> "/var/www/$appurl/index.html"
 
 service nginx restart
