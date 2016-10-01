@@ -101,9 +101,6 @@ server  {
 server {
     listen 80;
     server_name www$appurl;
-    root /var/www/$appurl;
-    index index.html index.htm;
-
 
     #listen              443 ssl;
 	#server_name         $appurl;
@@ -111,7 +108,9 @@ server {
 	#ssl_certificate_key /etc/nginx/ssl/$appurl.key;
 
     location / {
-       try_files $uri $uri/ =404;
+        root /var/www/$appurl;
+        index index.html index.htm;
+        try_files $uri $uri/ =404;
     }
 
     location /api/ {
