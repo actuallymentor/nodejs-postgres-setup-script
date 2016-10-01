@@ -102,11 +102,6 @@ server {
     listen 80;
     server_name $appurl;
 
-    #listen              443 ssl;
-	#server_name         $appurl;
-	#ssl_certificate     /etc/nginx/ssl/$appurl.chained.crt;
-	#ssl_certificate_key /etc/nginx/ssl/$appurl.key;
-
     location / {
         root /var/www/$appurl;
         index index.html index.htm;
