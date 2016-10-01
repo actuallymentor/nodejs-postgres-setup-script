@@ -89,8 +89,7 @@ webdev="
 server  {
 	listen 80;
 	server_name         $appurl;
-	#rewrite     ^   http://www.\$server_name\$request_uri? permanent;
-    return 301 http://\$server_name\$request_uri;
+    return 301 http://www.\$server_name\$request_uri;
 }
 #server  {
 #        listen 443 ssl;
