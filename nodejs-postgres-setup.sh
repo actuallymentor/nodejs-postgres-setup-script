@@ -85,11 +85,11 @@ rotaterules='/var/log/apt-security-updates {
     notifempty
 }'
 webdev="
-# Optional use for SSL rewrite
+# Redirect www to non www, can also be used to redirect to https
 server  {
 	listen 80;
-	server_name         $appurl;
-	rewrite     ^   http://www.\$server_name\$request_uri? permanent;
+	server_name         www.$appurl;
+	rewrite     ^   http://\$server_name\$request_uri? permanent;
 }
 #server  {
 #        listen 443 ssl;
@@ -100,7 +100,7 @@ server  {
 #}
 server {
     listen 80;
-    server_name www$appurl;
+    server_name $appurl;
 
     #listen              443 ssl;
 	#server_name         $appurl;
@@ -110,7 +110,7 @@ server {
     location / {
         root /var/www/$appurl;
         index index.html index.htm;
-        try_files $uri $uri/ =404;
+        try_files $uri $uri/ $uri&$args =404;
     }
 
     location /api/ {
